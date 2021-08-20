@@ -19,15 +19,13 @@ class PathVisualizer:
         self.create_grid()
 
     def main_loop(self):
-        #Game loop
         while (True):
             for event in self.pygame.event.get():
-                if event.type == self.pygame.QUIT: #The user closed the window!
+                if event.type == self.pygame.QUIT:
                     self.pygame.quit()
-                    self.sys.exit() #Stop running
+                    self.sys.exit()
 
             self.draw_background()
-            self.draw_grid()
             self.draw_grid()
             self.update()
             self.clock.tick(self.fps)#set frames/second
@@ -36,10 +34,6 @@ class PathVisualizer:
         self.squareGrid = [[Square(r, c, self.squareSize, False) for c in range(self.numberOfColums)] for r in range(self.numberOfRows)]
 
     def draw_grid(self):
-        # for r in range(0, self.height, self.squareSize):
-        #     for c in range(0, self.width, self.squareSize):
-        #         rect = pygame.Rect(x, y, blockSize, blockSize)
-        #         pygame.draw.rect(SCREEN, WHITE, rect, 1)
         for r in self.squareGrid:
             for c in r:
                 rect = self.pygame.Rect(c.get_x_position(), c.get_y_position(), c.get_size(), c.get_size() )
