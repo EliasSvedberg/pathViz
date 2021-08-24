@@ -11,13 +11,16 @@ class PathVisualizer:
         self.sys = sys
         self.width = w
         self.height = h
+        self.help = False
         self.commandWidth = w
         self.commandHeight = cw
         self.squareSize = sqs
         self.backgroundColor = bgc
         self.foregroundColor = fc
         self.fontSize = 40
+        self.bigFontSize = 60
         self.font = self.pygame.font.SysFont(None, self.fontSize)
+        self.bigFont = self.pygame.font.SysFont(None, self.bigFontSize)
         self.numberOfRows = int(self.height / self.squareSize)
         self.numberOfColums = int(self.width / self.squareSize)
         self.clock = pygame.time.Clock()
@@ -42,6 +45,7 @@ class PathVisualizer:
             self.draw_background()
             self.draw_command()
             self.draw_grid()
+            self.draw_help()
             self.update()
             self.clock.tick(self.fps)
 
@@ -165,7 +169,9 @@ class PathVisualizer:
             for nodeRow, nodeColumn in visitedNodes:
                 self.squareGrid[nodeRow][nodeColumn].set_visited()
         elif self.commandText.lower() == "help":
-            pass
+            self.help = True
+        elif self.commandText.lower() == "exit":
+            self.help = False
         self.clear_command_text()
 
     def clear_command_text(self):
@@ -183,30 +189,54 @@ class PathVisualizer:
         commandTextSurf = self.font.render(commandHeader + self.commandText, True, self.foregroundColor)
         self.screen.blit(commandTextSurf, commandTextSurf.get_rect(topleft = (self.width // 8, self.height + yPadding)))
 
-    def draw_grid(self):
-        for r in self.squareGrid:
-            for c in r:
-                rect = self.pygame.Rect(c.get_x_position(), c.get_y_position(), c.get_size(), c.get_size())
-                if c.get_wall():
-                    border = 0
-                    color = self.foregroundColor
-                elif c.get_startnode() or c.get_endnode():
-                    border = 0
-                    color = (126, 173, 105)
-                elif c.get_optimal():
-                    border = 0
-                    color = (223, 192, 10)
-                elif c.get_open():
-                    border = 0
-                    color = (199, 17, 80)
-                elif c.get_visited():
-                    border = 0
-                    color = (66, 116, 253)
+    def draw_help(self):
+        if self.help:
+            helpTextList = ["Usage",
+                            "Command-->Description",
+                            "help --> Brings up help menu",
+                            "search -a --> searches using algorithm '-a' ",
+                            "restart --> restart the application",
+                            "quit --> quits the application",
+                            "Algorithms",
+                            "Astar --> 'search Astar' to run"
+                            ]
+            stringVertLoc = 0
+            padding = 15
+            for index, line in enumerate(helpTextList):
+                if line in ("Usage", "Algorithms"):
+                    helpSurface = self.bigFont.render(line, True, self.foregroundColor)
+                    self.screen.blit(helpSurface, helpSurface.get_rect(midtop = (self.width // 2, self.height // 8 + stringVertLoc)))
+                    stringVertLoc += self.bigFont.get_height() + padding
                 else:
-                    border = 1
-                    color = self.foregroundColor
+                    helpSurface = self.font.render(line, True, self.foregroundColor)
+                    self.screen.blit(helpSurface, helpSurface.get_rect(topleft = (self.width // 4, self.height // 8 + stringVertLoc)))
+                    stringVertLoc += self.font.get_height() + padding
 
-                self.pygame.draw.rect(self.screen, color, rect, border)
+    def draw_grid(self):
+        if not self.help:
+            for r in self.squareGrid:
+                for c in r:
+                    rect = self.pygame.Rect(c.get_x_position(), c.get_y_position(), c.get_size(), c.get_size())
+                    if c.get_wall():
+                        border = 0
+                        color = self.foregroundColor
+                    elif c.get_startnode() or c.get_endnode():
+                        border = 0
+                        color = (126, 173, 105)
+                    elif c.get_optimal():
+                        border = 0
+                        color = (223, 192, 10)
+                    elif c.get_open():
+                        border = 0
+                        color = (199, 17, 80)
+                    elif c.get_visited():
+                        border = 0
+                        color = (66, 116, 253)
+                    else:
+                        border = 1
+                        color = self.foregroundColor
+
+                    self.pygame.draw.rect(self.screen, color, rect, border)
 
     def draw_background(self):
         self.screen.fill(self.backgroundColor)
