@@ -122,6 +122,42 @@ class PathVisualizer:
         return abs(endNode.get_col() - currentNode.get_col()) + abs(endNode.get_row() - currentNode.get_row())
 
 
+    def bfs(self):
+        q = deque()
+        for r in self.squareGrid:
+            for c in r:
+                if c.get_startnode():
+                    q.append([c])
+
+        while q:
+            path = q.popleft()
+            node = path[-1]
+            if node.get_endnode():
+                for n in path:
+                    n.set_optimal()
+                return path
+            for neigbor in self.get_neighbors(node):
+                if not neigbor.get_visited():
+                    new_path = list(path)
+                    new_path.append(neigbor)
+                    q.append(new_path)
+                    neigbor.set_visited()
+
+            # if not node.get_visited():
+            #     for neigbor in self.get_neighbors(node):
+            #         new_path = list(path)
+            #         new_path.append(neigbor)
+            #         q.append(new_path)
+            #         neigbor.set_open()
+            #         if neigbor.get_endnode():
+            #             for n in new_path:
+            #                 n.set_optimal()
+            #             return new_path
+            # node.set_visited()
+            # node.set_closed()
+            self.draw_grid()
+            self.update()
+
     def start_new_pathvisualizer(self):
         self.commandText = ""
         self.create_grid()
@@ -166,8 +202,8 @@ class PathVisualizer:
             self.start_new_pathvisualizer()
         elif self.commandText.lower() == "search astar":
             optimalPath, visitedNodes = self.a_star() #gör nåt med optimalpath
-            for nodeRow, nodeColumn in visitedNodes:
-                self.squareGrid[nodeRow][nodeColumn].set_visited()
+        elif self.commandText.lower() == "search bfs":
+            self.bfs() #gör nåt med resultatet
         elif self.commandText.lower() == "help":
             self.help = True
         elif self.commandText.lower() == "exit":
