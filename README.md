@@ -9,6 +9,7 @@ To perform actions use the commandline provided at the bottom of the screen.
 * exit: Exit the help menu   
 * search -algorithm:  Starts path finding using the given algorithm. 
 * restart: Resets the screen
+* quit: Closes the application
 
 ### Mouse options
 * Left mouse: Hold down/click on the grid to create walls
@@ -24,5 +25,8 @@ To run visualizer using Astar:
 
 To run visualizer using Breadth-first search:   
 * search bfs
+
+To reset the screen
+* restart
 
 
