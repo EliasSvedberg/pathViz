@@ -142,19 +142,9 @@ class PathVisualizer:
                     new_path.append(neigbor)
                     q.append(new_path)
                     neigbor.set_visited()
+                    neigbor.set_open()
 
-            # if not node.get_visited():
-            #     for neigbor in self.get_neighbors(node):
-            #         new_path = list(path)
-            #         new_path.append(neigbor)
-            #         q.append(new_path)
-            #         neigbor.set_open()
-            #         if neigbor.get_endnode():
-            #             for n in new_path:
-            #                 n.set_optimal()
-            #             return new_path
-            # node.set_visited()
-            # node.set_closed()
+            node.set_closed()
             self.draw_grid()
             self.update()
 
@@ -208,6 +198,9 @@ class PathVisualizer:
             self.help = True
         elif self.commandText.lower() == "exit":
             self.help = False
+        elif self.commandText.lower() == "quit":
+            self.pygame.quit()
+            self.sys.exit()
         self.clear_command_text()
 
     def clear_command_text(self):
@@ -232,9 +225,11 @@ class PathVisualizer:
                             "help --> Brings up help menu",
                             "search -a --> searches using algorithm '-a' ",
                             "restart --> restart the application",
+                            "exit --> exits the help menu",
                             "quit --> quits the application",
                             "Algorithms",
-                            "Astar --> 'search Astar' to run"
+                            "Astar --> 'search Astar' to run",
+                            "BFS --> 'search bfs' to run"
                             ]
             stringVertLoc = 0
             padding = 15
