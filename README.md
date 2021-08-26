@@ -18,6 +18,7 @@ To perform actions use the commandline provided at the bottom of the screen.
 ## Algorithms
 * Astar(astar): Uses heuristics to find the optimal path
 * Breadth-first search(bfs): Unweighted search that finds optimal path
+* Dijkstra(dijkstra): Similiar to Astar, but without heuristics. Finds optimal path
 
 ## Examples
 To run visualizer using Astar:  
@@ -25,6 +26,9 @@ To run visualizer using Astar:
 
 To run visualizer using Breadth-first search:   
 * search bfs
+
+To run visualizer using Breadth-first search:   
+* search dijkstra
 
 To reset the screen
 * restart

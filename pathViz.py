@@ -49,6 +49,42 @@ class PathVisualizer:
             self.update()
             self.clock.tick(self.fps)
 
+    def dijkstra(self):
+        q = []
+        dist = {}
+        prev = {}
+        for r in self.squareGrid:
+            for c in r:
+                if not c.get_startnode():
+                    dist[c] = math.inf
+                    prev[c] = None
+                else:
+                    dist[c] = 0
+                q.append(c)
+
+        while q:
+            tempCurr = q[0]
+            for index, node in enumerate(q):
+                if dist[q[index]] < dist[tempCurr]:
+                    tempCurr = q[index]
+            current = tempCurr
+            if current.get_endnode():
+                return self.reconstruct_path(prev, current, [])
+            q.remove(current)
+            for neigbor in self.get_neighbors(current):
+                alt = dist[current] + 1
+                if alt < dist[neigbor]:
+                    dist[neigbor] = alt
+                    prev[neigbor] = current
+                    neigbor.set_open()
+
+            current.set_visited()
+            current.set_closed()
+            self.draw_grid()
+            self.update()
+
+
+
     def a_star(self):
         openSet = []
         visitedNodes = []
@@ -194,6 +230,8 @@ class PathVisualizer:
             optimalPath, visitedNodes = self.a_star() #gör nåt med optimalpath
         elif self.commandText.lower() == "search bfs":
             self.bfs() #gör nåt med resultatet
+        elif self.commandText.lower() == "search dijkstra":
+            optimalPathDijk, visitedNodesDijk = self.dijkstra()
         elif self.commandText.lower() == "help":
             self.help = True
         elif self.commandText.lower() == "exit":
