@@ -8,6 +8,7 @@ To perform actions use the commandline provided at the bottom of the screen.
 * help: Prompts the user with a help screen
 * exit: Exit the help menu   
 * search -algorithm:  Starts path finding using the given algorithm. 
+* walls -arg: creates walls bases on argument
 * restart: Resets the screen
 * quit: Closes the application
 
@@ -29,6 +30,9 @@ To run visualizer using Breadth-first search:
 
 To run visualizer using Breadth-first search:   
 * search dijkstra
+
+To set random walls:
+* walls -random
 
 To reset the screen
 * restart

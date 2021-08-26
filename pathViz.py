@@ -1,4 +1,5 @@
 import pygame as pygame, sys
+import random
 from collections import deque
 import math
 from square import Square
@@ -82,6 +83,7 @@ class PathVisualizer:
             current.set_closed()
             self.draw_grid()
             self.update()
+        return [], []
 
 
 
@@ -124,6 +126,7 @@ class PathVisualizer:
             current.set_closed()
             self.draw_grid()
             self.update()
+        return [], visitedNodes
 
     def reconstruct_path(self, cameFrom, current, visitedNodes):
         optimalPath = deque()
@@ -183,6 +186,7 @@ class PathVisualizer:
             node.set_closed()
             self.draw_grid()
             self.update()
+        return [], []
 
     def start_new_pathvisualizer(self):
         self.commandText = ""
@@ -234,6 +238,8 @@ class PathVisualizer:
             optimalPathDijk, visitedNodesDijk = self.dijkstra()
         elif self.commandText.lower() == "help":
             self.help = True
+        elif self.commandText.lower() == "walls -random":
+            self.set_walls("random")
         elif self.commandText.lower() == "exit":
             self.help = False
         elif self.commandText.lower() == "quit":
@@ -255,6 +261,16 @@ class PathVisualizer:
         yPadding = 10
         commandTextSurf = self.font.render(commandHeader + self.commandText, True, self.foregroundColor)
         self.screen.blit(commandTextSurf, commandTextSurf.get_rect(topleft = (self.width // 8, self.height + yPadding)))
+
+    def set_walls(self, arg):
+        if arg == "random":
+            self.set_random_walls()
+
+    def set_random_walls(self):
+        for r in self.squareGrid:
+            for c in r:
+                if not (c.get_startnode() or c.get_endnode()):
+                    c.set_wall() if random.random() >= 0.7 else None
 
     def draw_help(self):
         if self.help:
