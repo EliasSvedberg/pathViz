@@ -49,11 +49,17 @@ class Square:
     def set_visited(self):
         self.visited = True
 
+    def unset_visited(self):
+        self.visited = False
+
     def get_visited(self):
         return self.visited
 
     def set_optimal(self):
         self.optimalNode = True
+
+    def unset_optimal(self):
+        self.optimalNode = False
 
     def get_optimal(self):
         return self.optimalNode

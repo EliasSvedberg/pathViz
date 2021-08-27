@@ -134,6 +134,8 @@ class PathVisualizer:
         current.set_optimal()
         while current in cameFrom.keys():
             current = cameFrom[current]
+            if not current:
+                return [], visitedNodes
             current.set_optimal()
             optimalPath.appendleft((current.get_row(), current.get_col()))
         return optimalPath, visitedNodes
@@ -230,16 +232,22 @@ class PathVisualizer:
     def submit_command(self):
         if self.commandText.lower() == "restart":
             self.start_new_pathvisualizer()
-        elif self.commandText.lower() == "search astar":
+        elif self.commandText.lower() == "search -astar":
             optimalPath, visitedNodes = self.a_star() #gör nåt med optimalpath
-        elif self.commandText.lower() == "search bfs":
-            self.bfs() #gör nåt med resultatet
-        elif self.commandText.lower() == "search dijkstra":
+        elif self.commandText.lower() == "search -bfs":
+            optimalPathBfs = self.bfs()
+        elif self.commandText.lower() == "search -dijkstra":
             optimalPathDijk, visitedNodesDijk = self.dijkstra()
+        elif self.commandText.lower() == "search -reset":
+            self.unset_search()
         elif self.commandText.lower() == "help":
             self.help = True
         elif self.commandText.lower() == "walls -random":
             self.set_walls("random")
+        elif self.commandText.lower() == "walls -maze":
+            self.set_walls("maze")
+        elif self.commandText.lower() == "walls -reset":
+            self.unset_walls()
         elif self.commandText.lower() == "exit":
             self.help = False
         elif self.commandText.lower() == "quit":
@@ -263,14 +271,48 @@ class PathVisualizer:
         self.screen.blit(commandTextSurf, commandTextSurf.get_rect(topleft = (self.width // 8, self.height + yPadding)))
 
     def set_walls(self, arg):
+        self.unset_walls()
         if arg == "random":
             self.set_random_walls()
+        if arg == "maze":
+            self.set_maze_walls()
+
+    def set_maze_walls(self):
+        columnIndexes = {}
+        for rInd, r in enumerate(self.squareGrid):
+            for cInd, c in enumerate(r):
+                if cInd not in (self.startNodeColumn, self.endNodeColumn):
+                    if cInd % 4 == 0:
+                        c.set_wall()
+                        columnIndexes[cInd] = int(math.floor(random.random() * self.numberOfRows))
+        for rInd, r in enumerate(self.squareGrid):
+            for cInd, c in enumerate(r):
+                if c.get_wall():
+                    if rInd in [columnIndexes[cInd] + 1, columnIndexes[cInd], columnIndexes[cInd] -1]:
+                        c.set_normal()
+
+
 
     def set_random_walls(self):
         for r in self.squareGrid:
             for c in r:
                 if not (c.get_startnode() or c.get_endnode()):
                     c.set_wall() if random.random() >= 0.7 else None
+
+    def unset_walls(self):
+        for r in self.squareGrid:
+            for c in r:
+                if not (c.get_startnode() or c.get_endnode()) and c.get_wall():
+                    c.set_normal()
+
+    def unset_search(self):
+        for r in self.squareGrid:
+            for c in r:
+                if not (c.get_startnode() or c.get_endnode()) and not c.get_wall():
+                    c.set_normal()
+                    c.unset_optimal()
+                    c.unset_visited()
+                    c.set_closed()
 
     def draw_help(self):
         if self.help:

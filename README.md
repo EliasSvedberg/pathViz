@@ -7,8 +7,10 @@ To perform actions use the commandline provided at the bottom of the screen.
 ### Command options
 * help: Prompts the user with a help screen
 * exit: Exit the help menu   
-* search -algorithm:  Starts path finding using the given algorithm. 
+* search -arg:  Starts path finding using the given algorithm. 
+    * args: -astar, -dijkstra, -bfs, -reset
 * walls -arg: creates walls bases on argument
+    * args: -random, -maze, -reset
 * restart: Resets the screen
 * quit: Closes the application
 
@@ -22,18 +24,16 @@ To perform actions use the commandline provided at the bottom of the screen.
 * Dijkstra(dijkstra): Similiar to Astar, but without heuristics. Finds optimal path
 
 ## Examples
-To run visualizer using Astar:  
-* search astar   
-
-To run visualizer using Breadth-first search:   
-* search bfs
-
-To run visualizer using Breadth-first search:   
-* search dijkstra
-
-To set random walls:
+Run visualizer using Astar:  
+* search -astar   
+Run visualizer using Breadth-first search:   
+* search -dijkstra
+Reset search:
+* search -reset
+Set random walls:
 * walls -random
-
+Reset walls:
+* walls -reset
 To reset the screen
 * restart
 
