@@ -324,8 +324,8 @@ class PathVisualizer:
                             "exit --> exits the help menu",
                             "quit --> quits the application",
                             "Algorithms",
-                            "Astar --> 'search Astar' to run",
-                            "BFS --> 'search bfs' to run"
+                            "Astar --> 'search -Astar' to run",
+                            "BFS --> 'search -bfs' to run"
                             ]
             stringVertLoc = 0
             padding = 15
